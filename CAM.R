@@ -20,7 +20,7 @@ incomplete_cases <- data[!complete.cases(data),]
 # Define U-Statistics functions
 u_statistic <- function(data) {
   n <- nrow(data)
-  mean(data$bmi)
+  lapply(data$bmi,mean)
 }
 
 cam_estimator <- function(complete, incomplete) {
@@ -32,13 +32,16 @@ cam_estimator <- function(complete, incomplete) {
   phi_m_complex <- lm(bmi ~ height * sex, data = complete)$fitted.values
   
   # Average predictions on incomplete cases
-  phi_hat_simple <- mean(phi_m_simple, na.rm = TRUE)
-  phi_hat_complex <- mean(predict(lm(bmi ~ height * sex, 
-                                     data = complete), newdata = incomplete), na.rm = TRUE)
+  #phi_hat_simple <- mean(phi_m_simple, na.rm = TRUE)
+  phi_hat_simple <- lapply(phi_m_simple, mean)
+  #phi_hat_complex <- mean(predict(lm(bmi ~ height * sex, 
+   #                                 data = complete), newdata = incomplete), na.rm = TRUE)
+  phi_hat_complex <- lapply(predict(lm(bmi ~ height * sex, 
+                                     data = complete), newdata = incomplete), mean)
   
   # Combine estimates
-  cam_simple <- theta_0 - mean(phi_hat_simple)
-  cam_complex <- theta_0 - mean(phi_hat_complex)
+  cam_simple <- theta_0 - phi_hat_simple #mean(phi_hat_simple)
+  cam_complex <- theta_0 - (phi_hat_complex) #mean(phi_hat_complex)
   
   return(list(cam_simple = cam_simple, cam_complex = cam_complex))
 }
