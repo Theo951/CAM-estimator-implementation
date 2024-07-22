@@ -15,6 +15,7 @@ df_subset <- subset(data, select = -c(id,occ,nocc,first,typ,age,ao))
 incomplete_case <- df_subset %>%
   filter(is.na(hgt.z) & is.na(bmi.z))
 
+
 #We have 201 complete cases in A0
 
 complete_case<- df_subset [complete.cases(df_subset),]
@@ -204,7 +205,7 @@ n <- nrow(data)
 subsample_size <- floor(n / B)
 for (n in 1:n){                                             #### SUMBSAMPLE ONLY RETURNS 1 ######
   for (b in 1:B) {
-  subsample <- data[sample(1:n, subsample_size), ]}
+  subsample <- data[sample(1:n, subsample_size,replace = TRUE), ]}
 }
 
 
